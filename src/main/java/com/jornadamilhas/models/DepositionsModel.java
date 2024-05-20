@@ -1,8 +1,12 @@
 package com.jornadamilhas.models;
 
+import com.jornadamilhas.dtos.DepositionsDataDto;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.beans.BeanUtils;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.UUID;
 
 @Table(name = "depositions")
@@ -11,9 +15,12 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DepositionsModel {
+public class DepositionsModel implements Serializable {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID depositionId;
 
     @Column(nullable = false)
@@ -23,5 +30,9 @@ public class DepositionsModel {
     private String testimony;
 
     private String imageUrl;
+
+    public DepositionsModel(DepositionsDataDto data) {
+        BeanUtils.copyProperties(data, this);
+    }
 
 }
