@@ -6,8 +6,10 @@ import com.jornadamilhas.repositories.IDepositionsRepository;
 import com.jornadamilhas.services.IDepositionsService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,6 +38,17 @@ public class DepositionsServiceImpl implements IDepositionsService {
     @Override
     public void delete(DepositionsModel depositionsModel) {
         this.iDepositionsRepository.delete(depositionsModel);
+    }
+
+    @Override
+    public DepositionsModel update(DepositionsModel depositionsModel) {
+        this.iDepositionsRepository.save(depositionsModel);
+        return depositionsModel;
+    }
+
+    @Override
+    public List<DepositionsModel> getTheLastThree() {
+        return this.iDepositionsRepository.getTheLastThree();
     }
 
 }

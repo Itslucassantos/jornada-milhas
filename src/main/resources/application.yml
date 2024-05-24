@@ -4,10 +4,14 @@ server:
 spring:
   datasource:
     url: 'jdbc:postgresql://${DATABASE_HOST:localhost}:${DATABASE_PORT:5432}/${DATABASE_NAME:jornada_milhas}'
-    username: ${DATABASE_USER:itslucassantos}
-    password: ${DATABASE_PASSWORD:7149}
+    username: ${DATABASE_USER:${DB_USER}}
+    password: ${DATABASE_PASSWORD:${DB_PASSWORD}}
     driver-class-name: org.postgresql.Driver
 
   output:
     ansi:
       enabled: Always
+
+  jpa:
+    show-sql: true
+    format-sql: true
