@@ -35,7 +35,7 @@ public class DepositionsDataDto {
     private String testimony;
 
     @JsonView(DepositionsView.DepositionsPut.class)
-    private String imageUrl;
+    private byte[] image;
 
     public DepositionsDataDto(DepositionsModel depositionsModel) {
         BeanUtils.copyProperties(depositionsModel, this);

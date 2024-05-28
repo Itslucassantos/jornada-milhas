@@ -69,7 +69,7 @@ public class DepositionsController {
         } else {
             DepositionsModel depositionsModel = depositionsModelOptional.get();
             depositionsModel.setTestimony(data.getTestimony());
-            depositionsModel.setImageUrl(data.getImageUrl());
+            depositionsModel.setImage(data.getImage());
             this.iDepositionsService.update(depositionsModel);
             return ResponseEntity.status(HttpStatus.OK).body(depositionsModel);
         }

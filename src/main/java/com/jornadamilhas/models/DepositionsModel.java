@@ -29,7 +29,7 @@ public class DepositionsModel implements Serializable {
     @Column(nullable = false)
     private String testimony;
 
-    private String imageUrl;
+    private byte[] image;
 
     public DepositionsModel(DepositionsDataDto data) {
         BeanUtils.copyProperties(data, this);
