@@ -10,7 +10,8 @@ import java.util.UUID;
 
 public interface IDepositionsRepository extends JpaRepository<DepositionsModel, UUID> {
 
-    @Query(value = "SELECT * FROM depositions ORDER BY deposition_id DESC LIMIT 3", nativeQuery = true)
+    // Utilizando JPQL na @Query para poder buscar em qualquer banco de dados.
+    @Query("SELECT d FROM DepositionsModel d ORDER BY d.depositionId DESC LIMIT 3")
     List<DepositionsModel> getTheLastThree();
 
 }
