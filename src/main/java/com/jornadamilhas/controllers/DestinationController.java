@@ -1,5 +1,6 @@
 package com.jornadamilhas.controllers;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.jornadamilhas.dtos.DestinationDataDto;
 import com.jornadamilhas.exceptions.DestinationException;
 import com.jornadamilhas.models.DestinationModel;
@@ -12,8 +13,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -60,6 +63,38 @@ public class DestinationController {
     public ResponseEntity<Page<DestinationModel>> findAllDestinations(@PageableDefault(size = 5, sort = {"name"})
                                                                               Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(this.iDestinationService.findAll(pageable));
+    }
+
+    @PutMapping("/updateDestination")
+    @Transactional
+    public ResponseEntity<Object> updateDestination(@ModelAttribute @Validated(DestinationDataDto.DestinationView.DestinationPut.class)
+                                                    @JsonView(DestinationDataDto.DestinationView.DestinationPut.class) DestinationDataDto data) {
+        Optional<DestinationModel> destinationModelOptional = this.iDestinationService.findById(data.getDestinationId());
+        if (destinationModelOptional.isEmpty()) {
+            throw new DestinationException(" Destino não encontrado! ");
+        } else {
+            DestinationModel destinationModel = destinationModelOptional.get();
+            if (!(data.getPrice() == 0) && !(data.getImage() == null)) {
+                destinationModel.setPrice(data.getPrice());
+                try {
+                    destinationModel.setImage(data.getImage().getBytes());
+                } catch (IOException e) {
+                    throw new RuntimeException(e.getMessage());
+                }
+            } else if (!(data.getPrice() == 0)) {
+                destinationModel.setPrice(data.getPrice());
+            } else if (!(data.getImage() == null)) {
+                try {
+                    destinationModel.setImage(data.getImage().getBytes());
+                } catch (IOException e) {
+                    throw new RuntimeException(e.getMessage());
+                }
+            } else {
+                throw new DestinationException("O campo preço ou a imagem deve ser preenchido!");
+            }
+            this.iDestinationService.save(destinationModel);
+            return ResponseEntity.status(HttpStatus.OK).body(destinationModel);
+        }
     }
 
 }

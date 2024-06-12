@@ -1,6 +1,5 @@
 package com.jornadamilhas.services.implement;
 
-import com.jornadamilhas.dtos.DestinationReturnDto;
 import com.jornadamilhas.models.DestinationModel;
 import com.jornadamilhas.repositories.IDestinationRepository;
 import com.jornadamilhas.services.IDestinationService;

@@ -1,6 +1,5 @@
 package com.jornadamilhas.services;
 
-import com.jornadamilhas.dtos.DestinationReturnDto;
 import com.jornadamilhas.models.DestinationModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

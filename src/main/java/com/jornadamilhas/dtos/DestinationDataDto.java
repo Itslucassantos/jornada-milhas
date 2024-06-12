@@ -1,6 +1,7 @@
 package com.jornadamilhas.dtos;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.jornadamilhas.models.DestinationModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -20,14 +21,21 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DestinationDataDto {
 
-    private UUID depositionId;
+    public interface DestinationView {
+        public static interface DestinationPut {}
+    }
+
+    @NotNull(groups = DestinationView.DestinationPut.class)
+    private UUID destinationId;
 
     @NotNull
     private String name;
 
+    @JsonView(DestinationView.DestinationPut.class)
     @NotNull
     private double price;
 
+    @JsonView(DestinationView.DestinationPut.class)
     @NotNull
     private MultipartFile image;
 
