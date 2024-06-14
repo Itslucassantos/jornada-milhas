@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface IDestinationRepository extends JpaRepository<DestinationModel, UUID> {
     Optional<DestinationModel> findByName(String name);
 
+    Optional<DestinationModel> findDestinationByName(String name);
 }

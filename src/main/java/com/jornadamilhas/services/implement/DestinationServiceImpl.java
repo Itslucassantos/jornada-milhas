@@ -46,4 +46,9 @@ public class DestinationServiceImpl implements IDestinationService {
         return this.iDestinationRepository.findAll(pageable);
     }
 
+    @Override
+    public Optional<DestinationModel> findDestinationByName(String name) {
+        return this.iDestinationRepository.findDestinationByName(name);
+    }
+
 }

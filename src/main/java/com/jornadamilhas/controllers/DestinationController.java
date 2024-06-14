@@ -97,4 +97,13 @@ public class DestinationController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity<Object> findDestinationByName(@RequestParam(value = "name") String name) {
+        Optional<DestinationModel> destinationModelOptional = this.iDestinationService.findDestinationByName(name);
+        if (!destinationModelOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum destino foi encontrado!");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(destinationModelOptional.get());
+    }
+
 }

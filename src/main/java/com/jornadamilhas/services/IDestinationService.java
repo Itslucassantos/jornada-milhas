@@ -17,4 +17,6 @@ public interface IDestinationService {
     void delete(DestinationModel destinationModel);
 
     Page<DestinationModel> findAll(Pageable pageable);
+
+    Optional<DestinationModel> findDestinationByName(String name);
 }
