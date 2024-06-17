@@ -1,0 +1,1 @@
+ALTER TABLE destinations ADD destination_description_model_id UUID;

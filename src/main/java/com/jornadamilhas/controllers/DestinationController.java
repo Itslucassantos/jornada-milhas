@@ -2,8 +2,11 @@ package com.jornadamilhas.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.jornadamilhas.dtos.DestinationDataDto;
+import com.jornadamilhas.dtos.DestinationDescriptionDto;
 import com.jornadamilhas.exceptions.DestinationException;
+import com.jornadamilhas.models.DestinationDescriptionModel;
 import com.jornadamilhas.models.DestinationModel;
+import com.jornadamilhas.services.IDestinationDescriptionService;
 import com.jornadamilhas.services.IDestinationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +28,12 @@ import java.util.UUID;
 public class DestinationController {
 
     private final IDestinationService iDestinationService;
+    private final IDestinationDescriptionService iDestinationDescriptionService;
 
     @Autowired
-    public DestinationController(IDestinationService iDestinationService) {
+    public DestinationController(IDestinationService iDestinationService, IDestinationDescriptionService iDestinationDescriptionService) {
         this.iDestinationService = iDestinationService;
+        this.iDestinationDescriptionService = iDestinationDescriptionService;
     }
 
     @PostMapping("/saveDestination")
@@ -104,6 +109,40 @@ public class DestinationController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum destino foi encontrado!");
         }
         return ResponseEntity.status(HttpStatus.OK).body(destinationModelOptional.get());
+    }
+
+    @PostMapping("/saveDestinationDescription")
+    @Transactional
+    public ResponseEntity<Object> saveDestinationDescription(@ModelAttribute @Valid DestinationDescriptionDto data) {
+        Optional<DestinationModel> destinationModelOptional = this.iDestinationService.findById(data.getDestinationId());
+        if (destinationModelOptional.isPresent() && destinationModelOptional.get().getDestinationDescriptionModelId() == null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(this.iDestinationDescriptionService.save(data));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No destination was found or description exists!");
+        }
+    }
+
+    @DeleteMapping("/deleteDestinationDescription/{destinationDescriptionId}")
+    @Transactional
+    public ResponseEntity<Object> deleteDestinationDescription(@PathVariable(value = "destinationDescriptionId") UUID destinationDescriptionId) {
+        Optional<DestinationDescriptionModel> descriptionModelOptional = this.iDestinationDescriptionService
+                .findById(destinationDescriptionId);
+        if (descriptionModelOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Description of destination does not exist!");
+        }
+        DestinationDescriptionModel descriptionModel = descriptionModelOptional.get();
+        this.iDestinationDescriptionService.delete(descriptionModel);
+        return ResponseEntity.status(HttpStatus.OK).body("Destination description successfully deleted!");
+    }
+
+    @GetMapping("/getDestinationDescription/{destinationDescriptionId}")
+    public ResponseEntity<Object> getDestinationDescription(@PathVariable(value = "destinationDescriptionId") UUID destinationDescriptionId) {
+        Optional<DestinationDescriptionModel> descriptionModelOptional = this.iDestinationDescriptionService
+                .findById(destinationDescriptionId);
+        if (descriptionModelOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Description of destination does not exist!");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(descriptionModelOptional.get());
     }
 
 }

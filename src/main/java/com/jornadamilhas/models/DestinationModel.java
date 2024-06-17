@@ -28,6 +28,9 @@ public class DestinationModel implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID destinationId;
 
+    @Column
+    private UUID destinationDescriptionModelId;
+
     @Column(nullable = false)
     private String name;
 
