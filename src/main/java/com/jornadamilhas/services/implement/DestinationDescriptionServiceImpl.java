@@ -56,4 +56,32 @@ public class DestinationDescriptionServiceImpl implements IDestinationDescriptio
         this.iDestinationDescriptionRepository.delete(descriptionModel);
     }
 
+    @Override
+    public DestinationDescriptionModel update(DestinationDescriptionDto data) {
+        Optional<DestinationDescriptionModel> descriptionModelOptional = this.iDestinationDescriptionRepository
+                .findById(data.getDestinationDescriptionId());
+        DestinationDescriptionModel descriptionModel = descriptionModelOptional.get();
+        if (data.getImage1() != null) {
+            try {
+                descriptionModel.setImage1(data.getImage1().getBytes());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } if (data.getImage2() != null) {
+            try {
+                descriptionModel.setImage2(data.getImage2().getBytes());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } if (data.getName() != null) {
+            descriptionModel.setName(data.getName());
+        } if (data.getMeta() != null) {
+            descriptionModel.setMeta(data.getMeta());
+        } if (data.getDescriptiveText() != null) {
+            descriptionModel.setDescriptiveText(data.getDescriptiveText());
+        }
+        this.iDestinationDescriptionRepository.save(descriptionModel);
+        return descriptionModel;
+    }
+
 }

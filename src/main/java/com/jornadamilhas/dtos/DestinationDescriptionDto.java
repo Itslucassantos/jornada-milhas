@@ -1,7 +1,9 @@
 package com.jornadamilhas.dtos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.jornadamilhas.models.DestinationModel;
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,8 +16,14 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class DestinationDescriptionDto {
 
+    public interface DestinationView {
+        public static interface DestinationDescriptionPut {}
+    }
+
+    @NotNull(groups = DestinationView.DestinationDescriptionPut.class)
     private UUID destinationDescriptionId;
 
     @Column(nullable = false)

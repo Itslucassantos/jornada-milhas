@@ -12,4 +12,6 @@ public interface IDestinationDescriptionService {
     Optional<DestinationDescriptionModel> findById(UUID destinationDescriptionId);
 
     void delete(DestinationDescriptionModel descriptionModel);
+
+    DestinationDescriptionModel update(DestinationDescriptionDto data);
 }

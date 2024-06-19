@@ -145,4 +145,18 @@ public class DestinationController {
         return ResponseEntity.status(HttpStatus.OK).body(descriptionModelOptional.get());
     }
 
+    @PutMapping("/updateDestinationDescription")
+    @Transactional
+    public ResponseEntity<Object> updateDestinationDescription(@ModelAttribute
+                                                                   @Validated(DestinationDescriptionDto
+                                                                           .DestinationView.DestinationDescriptionPut.class)
+                                                                   @JsonView(DestinationDescriptionDto.DestinationView
+                                                                           .DestinationDescriptionPut.class) DestinationDescriptionDto data) {
+        if (data.getImage1() == null && data.getImage2() == null && data.getName() == null && data.getMeta() == null
+                && data.getDescriptiveText() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("To update there needs to be data.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(this.iDestinationDescriptionService.update(data));
+    }
+
 }
