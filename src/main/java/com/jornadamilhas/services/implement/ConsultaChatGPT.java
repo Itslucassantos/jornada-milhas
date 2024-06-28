@@ -19,7 +19,7 @@ public class ConsultaChatGPT {
 
     public String obterInformacao(String nome) {
         CompletionRequest requisicao = CompletionRequest.builder()
-                .model("davinci-002")
+                .model("gpt-3.5-turbo")
                 .prompt("Faça um resumo sobre " + nome + " enfatizando o porquê este lugar é incrível. Utilize uma linguagem informal e até 100 caracteres no máximo em cada parágrafo. Crie 2 parágrafos neste resumo.")
                 .maxTokens(200)
                 .build();
