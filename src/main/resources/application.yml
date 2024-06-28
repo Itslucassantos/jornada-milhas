@@ -1,6 +1,9 @@
 server:
   port: 8081
 
+openai:
+  api_key: ${OPENAI_API_KEY}
+
 spring:
   datasource:
     url: 'jdbc:postgresql://${DATABASE_HOST:localhost}:${DATABASE_PORT:5432}/${DATABASE_NAME:jornada_milhas}'
