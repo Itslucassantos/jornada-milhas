@@ -17,25 +17,30 @@ import java.util.UUID;
 public class DestinationDescriptionServiceImpl implements IDestinationDescriptionService {
 
     private final IDestinationDescriptionRepository iDestinationDescriptionRepository;
-
     private final IDestinationRepository iDestinationRepository;
+    private final ConsultaChatGPT consultaChatGPT;
 
     @Autowired
-    public DestinationDescriptionServiceImpl(IDestinationDescriptionRepository iDestinationDescriptionRepository, IDestinationRepository iDestinationRepository) {
+    public DestinationDescriptionServiceImpl(IDestinationDescriptionRepository iDestinationDescriptionRepository, IDestinationRepository iDestinationRepository, ConsultaChatGPT consultaChatGPT) {
         this.iDestinationDescriptionRepository = iDestinationDescriptionRepository;
         this.iDestinationRepository = iDestinationRepository;
+        this.consultaChatGPT = consultaChatGPT;
     }
 
     @Override
     public DestinationDescriptionModel save(DestinationDescriptionDto data) {
         DestinationDescriptionModel descriptionModel = null;
+        Optional<DestinationModel> destinationModelOptional = this.iDestinationRepository.findById(data.getDestinationId());
+        if (data.getDescriptiveText() == null) {
+            String text = consultaChatGPT.obterInformacao(destinationModelOptional.get().getName());
+            descriptionModel.setDescriptiveText(text);
+        }
         try {
             descriptionModel = new DestinationDescriptionModel(data);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         DestinationDescriptionModel descriptionModelSaved = this.iDestinationDescriptionRepository.save(descriptionModel);
-        Optional<DestinationModel> destinationModelOptional = this.iDestinationRepository.findById(data.getDestinationId());
         DestinationModel destinationModel = destinationModelOptional.get();
         destinationModel.setDestinationDescriptionModelId(descriptionModelSaved.getDestinationDescriptionId());
         this.iDestinationRepository.save(destinationModel);
